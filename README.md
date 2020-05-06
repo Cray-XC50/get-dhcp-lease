@@ -1,3 +1,6 @@
+get-dhcp-lease
+------------------
+
 These scripts will prompt for a dot-notated mac address, convert it into hexdecimal
 Then will prompt for selection of four servers to select from
 create a file to execute from a template
