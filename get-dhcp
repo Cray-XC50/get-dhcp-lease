@@ -1,0 +1,69 @@
+#!/bin/bash
+
+cp DHCP_SSHTmp DHCP_script
+PS3='Please enter the DHCP Server of your choice: '
+echo " "
+options=("Server 1" "Server 2" "Server 3" "Server 4" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Server 1")
+            echo "logging into DHCP server $opt"
+            sed -i 's/SwitchIP/<server1_ip>/g' DHCP_script
+            echo "********GREP MACC address**********"
+            echo "  "
+            read -p "Enter MAC address: " IPVAR1
+            D2H=$(echo "${IPVAR1//.}" | sed 's/../&:/g;s/:$//')
+            sed -i "s/CoMMaND/cat \/var\/log\/dhcpd.log\|grep -i $D2H |tail -6/g" DHCP_script
+	    sleep 1;
+	    sed -i "s/LeaSes/cat \/var\/lib\/dhcp\/dhcpd.leases\|grep -i -A 7 -B 9 $D2H|tail -20/g" DHCP_script 
+	    sleep 1;
+            echo "more /var/log/messages | grep -i"$IPVAR	   
+	    ./DHCP_script
+           
+ ;;
+        "Server 2")
+              echo "logging into DHCP server $opt"
+            sed -i 's/SwitchIP/<server2_ip>/g' DHCP_script
+            echo "********GREP MACC address**********"
+            echo "  "
+            read -p "Enter MAC address: " IPVAR1
+            D2H=$(echo "${IPVAR1//.}" | sed 's/../&:/g;s/:$//')
+            sed -i "s/CoMMaND/cat \/var\/log\/dhcpd.log\|grep -i $D2H|tail -6/g" DHCP_script
+	    sleep 1;
+            sed -i "s/LeaSes/cat \/var\/lib\/dhcp\/dhcpd.leases\|grep -i -A 7 -B 9 $D2H|tail -20/g" DHCP_script
+            sleep 1;
+            ./DHCP_script
+            ;;
+        "Server 3")
+             echo "logging into DHCP server $opt"
+            sed -i 's/SwitchIP/<server3_ip>/g' DHCP_script
+            echo "********GREP MACC address**********"
+            echo "  "
+            read -p "Enter MAC address: " IPVAR1
+            D2H=$(echo "${IPVAR1//.}" | sed 's/../&:/g;s/:$//')
+            sed -i "s/CoMMaND/cat \/var\/log\/dhcpd.log\|grep -i $D2H|tail -6/g" DHCP_script
+	    sleep 1;
+            sed -i "s/LeaSes/cat \/var\/lib\/dhcp\/dhcpd.leases\|grep -i -A 7 -B 9 $D2H|tail -20/g" DHCP_script
+            sleep 1;
+	    ./DHCP_script
+            ;;
+        "Server 4")
+            echo "logging into DHCP server $opt"
+            sed -i 's/SwitchIP/<server4_ip>/g' DHCP_script
+            echo "********GREP MACC address**********"
+            echo "  "
+            read -p "Enter MAC address: " IPVAR1
+            D2H=$(echo "${IPVAR1//.}" | sed 's/../&:/g;s/:$//')
+            sed -i "s/CoMMaND/cat \/var\/log\/dhcpd.log\|grep -i $D2H|tail -6/g" DHCP_script
+	    sleep 1;
+            sed -i "s/LeaSes/cat \/var\/lib\/dhcp\/dhcpd.leases\|grep -i -A 7 -B 9 $D2H|tail -20/g" DHCP_script
+            sleep 1;
+	    ./DHCP_script
+            ;;
+        "Quit")   
+	 break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
